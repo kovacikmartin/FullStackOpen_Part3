@@ -22,7 +22,22 @@ const phonebookSchema = new mongoose.Schema({
     },
     number: {
         type: String,
-        required: true
+        minLength: 8,
+        required: [true, 'Number is required'],
+        validate: {
+
+            validator: function(v){
+
+                if(v.includes('-')){
+
+                    return /\d{2}-\d{5,}/.test(v) || /\d{3}-\d{4,}/.test(v)
+                }
+            
+                // number without - 
+                return /\d{8,}/.test(v)
+            },
+            message: props => 'invalid phone number!'
+        }
     }
 })
 
